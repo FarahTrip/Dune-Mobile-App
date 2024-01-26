@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 
@@ -11,7 +11,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import { Poppins_400Regular } from "@expo-google-fonts/poppins";
+
 import TextPop from "../components/TextPop";
 
 const LoginPage = () => {

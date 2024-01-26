@@ -6,6 +6,8 @@ import { setCustomText } from "react-native-global-props";
 import { useFonts, Poppins_400Regular } from "@expo-google-fonts/poppins";
 import { Audiowide_400Regular } from "@expo-google-fonts/audiowide";
 import Home from "./screens/Home";
+import NearMe from "./screens/NearMe";
+import LoginPage from "./screens/LoginPage";
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -25,5 +27,5 @@ export default function App() {
     setCustomText(customTextProps);
   }
 
-  return <Home></Home>;
+  return <NearMe></NearMe>;
 }

@@ -1,11 +1,13 @@
-import React from "react";
-import { ScrollView, Text, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { FlatList, RefreshControl, ScrollView, Text, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import OptionSwitcher from "../components/OptionSwitcher";
 import HomeFillters from "../components/HomeFillters";
 import { eventCardType } from "../types/event.types";
 import EventCard from "../components/EventCard";
 import MenuDrawer from "../components/MenuDrawer";
+import { client } from "../global/client";
+import { colors } from "react-native-elements";
 
 const Home = () => {
   const stories = [
@@ -38,97 +40,86 @@ const Home = () => {
     },
   ];
 
-  const events: eventCardType[] = [
-    {
-      name: "Concert nebunia lui Salam",
-      location: {
-        longitude: "",
-        latitude: "",
-        name: "Lyods pub",
-      },
-      imagePath:
-        "https://images.pexels.com/photos/2608517/pexels-photo-2608517.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-      user: "AndreiCC",
-    },
-    {
-      name: "Concert nebunia lui Salam",
-      location: {
-        longitude: "",
-        latitude: "",
-        name: "Lyods pub",
-      },
-      imagePath:
-        "https://as1.ftcdn.net/v2/jpg/05/03/58/28/1000_F_503582859_7SJMOrd2Xf5ujdBjrBCam7ngr9wc84vH.jpg",
-      user: "Paladinu",
-    },
-    {
-      name: "Concert nebunia lui Salam",
-      location: {
-        longitude: "",
-        latitude: "",
-        name: "Lyods pub",
-      },
-      imagePath: "../assets/placeholders/plch1.jpg",
-      user: "SmecherituUrsitu",
-    },
-    {
-      name: "Concert nebunia lui Salam",
-      location: {
-        longitude: "",
-        latitude: "",
-        name: "Lyods pub",
-      },
-      imagePath: "../assets/placeholders/plch2.jpg",
-      user: "POelerima",
-    },
-  ];
+  const [events, setevents] = useState();
+  const [refreshing, setrefreshing] = useState(false);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      const events = await getInitialEvents();
+      setevents(events);
+      console.log(events);
+    };
+
+    fetchEvents();
+  }, []);
+
+  const getInitialEvents = async () => {
+    try {
+      const response = await client.get("/events");
+      return response.data;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const refresh = async () => {
+    try {
+      const response = await client.get("/events");
+      setevents(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <LinearGradient
       colors={["#272323", "#000000"]}
       className="p-6 w-full h-full flex"
     >
-      <MenuDrawer></MenuDrawer>
-      <ScrollView>
-        <View>
-          <ScrollView
-            pagingEnabled={true}
-            horizontal={true}
-            className="flex flex-row w-full "
-            decelerationRate={"fast"}
-            snapToInterval={362}
-            snapToAlignment={"end"}
-            contentContainerStyle={{
-              paddingTop: 35,
-              gap: 12,
-            }}
-          >
-            {stories.map((story) => (
-              <View className="gap-2 flex items-center">
-                <View className="w-20 h-20 rounded-full bg-white "></View>
-                <Text className="text-white">{story.name}</Text>
-              </View>
-            ))}
-          </ScrollView>
-        </View>
-        <View className="w-full flex items-center justify-center mt-4 mb-4">
-          <View className="w-64">
-            <OptionSwitcher></OptionSwitcher>
-          </View>
-        </View>
-        <HomeFillters></HomeFillters>
-
+      <View>
         <ScrollView
+          pagingEnabled={true}
+          horizontal={true}
+          className="flex flex-row w-full "
+          decelerationRate={"fast"}
+          snapToInterval={362}
+          snapToAlignment={"end"}
           contentContainerStyle={{
-            gap: 25,
-            marginTop: 25,
+            paddingTop: 35,
+            gap: 12,
           }}
         >
-          {events.map((event) => (
-            <EventCard event={event}></EventCard>
+          {stories.map((story) => (
+            <View className="gap-2 flex items-center">
+              <View className="w-20 h-20 rounded-full bg-white "></View>
+              <Text className="text-white">{story.name}</Text>
+            </View>
           ))}
         </ScrollView>
-      </ScrollView>
+      </View>
+      <View className="w-full flex items-center justify-center mt-4 mb-4">
+        <View className="w-64">
+          <OptionSwitcher></OptionSwitcher>
+        </View>
+      </View>
+      <HomeFillters></HomeFillters>
+      <FlatList
+        className=""
+        // keyExtractor={(event) => }
+        refreshing={refreshing}
+        onRefresh={refresh}
+        data={events}
+        renderItem={({ item }) => <EventCard event={item}></EventCard>}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={refresh}
+            tintColor={"#fff"}
+          />
+        }
+      ></FlatList>
+
+      <MenuDrawer></MenuDrawer>
     </LinearGradient>
   );
 };

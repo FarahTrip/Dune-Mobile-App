@@ -59,12 +59,12 @@ const MenuDrawer = () => {
     <Animated.View
       style={{ height }}
       {...panResponder.panHandlers}
-      className={`w-11/12 absolute flex bottom-10  flex-row justify-between  z-50 left-[10%] rounded-[40rem] border-[1px] border-white overflow-hidden`}
+      className={`w-11/12 absolute flex bottom-10  flex-row justify-between  z-50 self-center rounded-[50px] border-[1px] border-white overflow-hidden`}
     >
       <LinearGradient
-        colors={["rgba(197, 196, 179, 1)", "rgba(18, 18, 18, 0.9)"]}
+        colors={["rgba(18, 18, 18, 1)", "rgba(18, 18, 18, 0.9)"]}
         className={
-          "w-full h-full flex px-6 flex-row justify-between items-center rounded-[40rem]"
+          "w-full h-full flex px-6 flex-row justify-between items-center rounded-[50px]"
         }
         start={{ x: 0.25, y: 0.25 }}
       >
@@ -97,7 +97,12 @@ const MenuDrawer = () => {
                 }}
                 className="flex  rounded-full h-24 w-24"
               ></Image>
-              <Text className="text-2xl">John Doe</Text>
+              <Text
+                className="text-2xl text-white
+              "
+              >
+                John Doe
+              </Text>
             </View>
           </View>
         )}

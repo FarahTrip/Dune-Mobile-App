@@ -1,8 +1,10 @@
 import { location } from "./location.types";
 
 export type eventCardType = {
+  id: string;
   name: string;
-  location: location;
+  longitute: number;
+  latitude: number;
   imagePath: string;
-  user: string;
+  user?: string;
 };
